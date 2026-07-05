@@ -14,15 +14,18 @@ conda install -n base -c conda-forge mamba --strict-channel-priority
 mamba install -c conda-forge scanpy
 
 ##Use python
-import scanpy as sc
-adata = sc.read_h5ad("/path/to/.h5ad")  ##adata = sc.read_h5ad("PFC427_raw_data.h5ad", backed="r") if data too large!
-print(adata)
+#import scanpy as sc
+#adata = sc.read_h5ad("PFC427_raw_data.h5ad", backed="r")  ##my data is too large!
+#print(adata)
 ##view number of donors, my column is called batch, may vary
-adata.obs["batch"].unique() #15
+#adata.obs["batch"].unique() #15
 
 ##need to check which of these donors are controls! downloaded metadata
 import pandas as pd
 meta = pd.read_csv("individual_metadata_deidentified.tsv", sep="\t")
 meta.columns #Pathologic_diagnosis_of_AD
+print(meta['Pathologic_diagnosis_of_AD'].value_counts()) ##189 controls
+
+#batch_map = pd.read_csv("batch_mapping_deidentified.tsv", sep="\t")
 
 
