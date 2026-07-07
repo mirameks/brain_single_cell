@@ -1,1 +1,30 @@
+##install miniconda
+wget https://repo.anaconda.com/miniconda/Miniconda3-py310_23.1.0-1-Linux-x86_64.sh
+bash Miniconda3-py310_23.1.0-1-Linux-x86_64.sh
+conda init
+source ~/.bashrc
 
+##create python environment using conda
+conda create -n sc python=3.10
+conda activate sc
+
+##Install packages using conda
+##conda install -c conda-forge scanpy - stuck
+conda install -n base -c conda-forge mamba --strict-channel-priority
+mamba install -c conda-forge scanpy
+
+##Use python
+#import scanpy as sc
+#adata = sc.read_h5ad("PFC427_raw_data.h5ad", backed="r")  ##my data is too large!
+#print(adata)
+##view number of donors, my column is called batch, may vary
+#adata.obs["batch"].unique() #15
+
+##need to check which of these donors are controls! downloaded metadata
+import pandas as pd
+meta = pd.read_csv("individual_metadata_deidentified.tsv", sep="\t")
+meta.columns #Pathologic_diagnosis_of_AD
+print(meta['Pathologic_diagnosis_of_AD'].value_counts()) ##189 controls
+meta.loc[meta['Pathologic_diagnosis_of_AD'] == 'no','age_death'] #to check age of controls
+
+#batch_map = pd.read_csv("batch_mapping_deidentified.tsv", sep="\t")
