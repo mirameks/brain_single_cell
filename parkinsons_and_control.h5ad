@@ -1,0 +1,7 @@
+##PARKINSONS + CONTROL
+#to check controls + age
+adata = adata[adata.obs["disease"] == "normal"]
+
+
+
+
