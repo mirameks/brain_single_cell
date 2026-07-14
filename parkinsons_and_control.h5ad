@@ -1,6 +1,45 @@
 ##PARKINSONS + CONTROL
-#to check controls + age
+#to check controls + age after loading
 adata = adata[adata.obs["disease"] == "normal"]
+
+#mean expression
+import scanpy as sc
+import pandas as pd
+import numpy as np
+
+# ------------------------
+# Load in backed mode (CRITICAL for 31GB)
+# ------------------------
+adata = sc.read_h5ad("your_file.h5ad", backed="r")
+
+print("Loaded:", adata.shape)
+
+# ------------------------
+# Compute gene means safely
+# ------------------------
+# Works for sparse + backed without loading full matrix
+gene_means = np.array(adata.X.mean(axis=0)).ravel()
+
+# ------------------------
+# Build dataframe
+# ------------------------
+h5ad_df = pd.DataFrame({
+    "gene_name": adata.var_names.astype(str),
+    "mean_expression": gene_means
+})
+
+# ------------------------
+# Clean gene names
+# ------------------------
+h5ad_df["gene_name"] = h5ad_df["gene_name"].str.strip()
+
+# ------------------------
+# Save output
+# ------------------------
+h5ad_df.to_csv("mean_20_dataset.csv", index=False)
+
+print("✅ DONE: mean_20_dataset.csv saved")
+print("Genes:", len(h5ad_df))
 
 
 
